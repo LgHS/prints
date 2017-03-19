@@ -1,4 +1,4 @@
-include <modules_coin_0_3.scad>
+include <modules_coin_0_4.scad>
 
 longueur_tube = 30;
 largeur_tube = 26;
@@ -14,16 +14,8 @@ union()
     color("green")
     cube(largeur_tube);
     
-    difference()
-    {
-        color("blue")
-        translate([largeur_tube,0,0])
-        cube([longueur_tube,largeur_tube,largeur_tube]);
-        
-        color("red")
-        translate([largeur_tube,epaisseur_tube,epaisseur_tube])
-        tube_profile(longueur_tube+1, epaisseur_bloc, epaisseur_bloc, largeur_profile);
-    }
+    tube_profile_X(
+        largeur_tube,0,0,longueur_tube, largeur_tube, epaisseur_bloc, longueur_bloc, largeur_profile);
   
     difference()
     {
