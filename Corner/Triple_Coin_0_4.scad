@@ -1,21 +1,34 @@
-include <modules_coin_0_4.scad>
+use <modules_coin_0_4.scad>
 
-longueur_tube = 30;
-largeur_tube = 26;
-largeur_profile = 21;
+/* [Arms] */
+// Length of the arms
+armsL = 30.0;
+// Width of the arms
+armsW = 26.0;
 
-epaisseur_bloc = 3;
-longueur_bloc = 6;
+/* [Profiles] */
+// Width of the profiles
+profilesW = 21.0;
 
-epaisseur_tube = (largeur_tube-largeur_profile)/2;
+/* [Blocs] */
+// Length of the blocs
+blocsL = 6;
+// Width of the blocs
+blocsW = 3;
+
+/* [Hidden] */
+// Thickness of the arms
+armsT = (armsW-profilesW)/2;
+
+// to avoid "z fighting" where surfaces line up exactly, add a bit of fudge
+fudge = .001;
 
 union()
 {
     color("green")
-    cube(largeur_tube);
+    cube(armsL);
     
-    tube_profile_X(
-        largeur_tube,0,0,longueur_tube, largeur_tube, epaisseur_bloc, longueur_bloc, largeur_profile);
+    tube_profile(armsL, ArmsW, epaisseur_bloc, longueur_bloc, largeur_profile);
   
     difference()
     {

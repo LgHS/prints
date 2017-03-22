@@ -1,55 +1,80 @@
-module tube_profile_X(
-    x = 0, 
-    y = 0, 
-    z = 0,
-    longueur_tube = 40,
-    largeur_tube = 26,
-    epaisseur_bloc = 3,
-    largeur_bloc = 6,
-    largeur_profile = 21,
-    couleur_tube = "blue")
+/* [Tips] */
+// Length of the tips
+tipsL = 30.0;  // [1,2,3,4,5,6,7,8,9,30]
+// Width of the tips
+tipsW = 26.0;
+
+/* [Profiles] */
+// Width of the profiles
+profilesW = 21.0;
+
+/* [Blocs] */
+// Length of the blocs
+blocsL = 6;
+// Width of the blocs
+blocsW = 3;
+
+/* [Hidden] */
+// Thickness of the arms
+armsT = (armsW-profilesW)/2;
+
+// to avoid "z fighting" where surfaces line up exactly, add a bit of fudge
+fudge = .001;
+
+module void_profile(
+    length,         // Length of the profile
+    width = 20,     // Width of the profile
+    blocL = 6,      // Lenght of the bloc
+    blocW = 3)      // Width of the bloc
 {
-    epaisseur_tube = (largeur_tube-largeur_profile)/2;
+    step = (width - blocW)/2;
+
+    // Bottom-left hole
+    translate([0,0,0])             
+    cube([length,step,step]);
     
+    // Bottom-rigth hole
+    translate([0,step+blocW,0])    
+    cube([length,step,step]);
+    
+    // Top-left hole
+    translate([0,0,step+blocW])
+    cube([length,step,step]);
+    
+    // Top-rigth hole
+    translate([0,step+blocW,step+blocW])
+    cube([length,step,step]);
+    
+    // Middle hole
+    translate([0,blocW,blocW])
+    cube([length,width-2*blocW,width-2*blocW]);
+}
+
+module tip_profile(
+    tipL,           // Length of the tip
+    tipW,           // Width of the tip
+    profileW,       // Width of the profile
+    blocL,          // Length of the bloc
+    blocW,          // Width of the bloc
+    fudge=1)        // 
+{
     difference()
     {
-        color(couleur_tube)
-        translate([x,y,z])
-        cube([longueur_tube, largeur_tube, largeur_tube]);
+        // The tip
+        color("blue")
+        cube([tipL, tipW, tipW]);
         
-        translate([x,y+epaisseur_tube,z+epaisseur_tube])
-        tube_profile(longueur_tube+1, epaisseur_bloc, largeur_bloc, largeur_profile);        
+        color("red")
+        translate([0, (tipW-profileW)/2, (tipW-profileW)/2])
+        void_profile(tipL+fudge, profileW, blocL, blocW);
     }
 }
 
-module tube_profile(
-    longueur, 
-    epaisseur_bloc = 3, 
-    largeur_bloc = 6, 
-    largeur_profile = 20)
-{
-    ecart = (largeur_profile - largeur_bloc)/2;
-
-    #translate([-1,0,0])
-    cube([longueur+2,ecart,ecart]);
-    
-    #translate([-1,ecart+largeur_bloc,0])
-    cube([longueur+2,ecart,ecart]);
-    
-    #translate([-1,0,ecart+largeur_bloc])
-    cube([longueur+2,ecart,ecart]);
-    
-    #translate([-1,ecart+largeur_bloc,ecart+largeur_bloc])
-    cube([longueur+2,ecart,ecart]);
-    
-    #translate([-1,epaisseur_bloc,epaisseur_bloc])
-    cube([longueur+2,largeur_profile-2*epaisseur_bloc,largeur_profile-2*epaisseur_bloc]);
-}
 union()
 {
-color("green")
-cube(26);
+    color("green")
+    cube(tipsW);
 
-tube_profile_X(
-    26,0,0,40, 26, 3, 6, 21);
+    translate([tipsW, 0, 0])
+    tip_profile(tipsL, tipsW, profilesW, blocsL, blocsW);
 }
