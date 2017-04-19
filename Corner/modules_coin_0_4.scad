@@ -6,7 +6,7 @@ tipsW = 26.0;
 
 /* [Profiles] */
 // Width of the profiles
-profilesW = 21.0;
+profilesW = 20.2;
 
 /* [Blocs] */
 // Length of the blocs
@@ -15,39 +15,38 @@ blocsL = 6;
 blocsW = 3;
 
 /* [Hidden] */
-// Thickness of the arms
-armsT = (armsW-profilesW)/2;
 
 // to avoid "z fighting" where surfaces line up exactly, add a bit of fudge
-fudge = .001;
+fudge = 0.1;
 
 module void_profile(
     length,         // Length of the profile
     width = 20,     // Width of the profile
     blocL = 6,      // Lenght of the bloc
-    blocW = 3)      // Width of the bloc
+    blocW = 3,      // Width of the bloc
+    fudge = 0.1)    // 
 {
-    step = (width - blocW)/2;
-
+    step = (width - blocL)/2;
+    
     // Bottom-left hole
-    translate([0,0,0])             
-    cube([length,step,step]);
-    
+    translate([-fudge,0,0])             
+    cube([length+2*fudge,step,step]);
+
     // Bottom-rigth hole
-    translate([0,step+blocW,0])    
-    cube([length,step,step]);
-    
+    translate([-fudge,step+blocL,0])    
+    cube([length+2*fudge,step,step]);
+
     // Top-left hole
-    translate([0,0,step+blocW])
-    cube([length,step,step]);
-    
+    translate([-fudge,0,step+blocL])
+    cube([length+2*fudge,step,step]);
+
     // Top-rigth hole
-    translate([0,step+blocW,step+blocW])
-    cube([length,step,step]);
-    
+    translate([-fudge,step+blocL,step+blocL])
+    cube([length+2*fudge,step,step]);
+
     // Middle hole
-    translate([0,blocW,blocW])
-    cube([length,width-2*blocW,width-2*blocW]);
+    translate([-fudge,blocW,blocW])
+    cube([length+2*fudge,width-2*blocW,width-2*blocW]);
 }
 
 module tip_profile(
@@ -56,7 +55,7 @@ module tip_profile(
     profileW,       // Width of the profile
     blocL,          // Length of the bloc
     blocW,          // Width of the bloc
-    fudge=1)        // 
+    fudge=0.1)        // 
 {
     difference()
     {
@@ -66,15 +65,15 @@ module tip_profile(
         
         color("red")
         translate([0, (tipW-profileW)/2, (tipW-profileW)/2])
-        void_profile(tipL+fudge, profileW, blocL, blocW);
+        void_profile(tipL+fudge, profileW, blocL, blocW, fudge);
     }
 }
 
 union()
 {
-    color("green")
-    cube(tipsW);
+    //color("green")
+    //cube(tipsW);
 
-    translate([tipsW, 0, 0])
-    tip_profile(tipsL, tipsW, profilesW, blocsL, blocsW);
+    //translate([tipsW, 0, 0])
+    tip_profile(tipsL, tipsW, profilesW, blocsL, blocsW, fudge);
 }
