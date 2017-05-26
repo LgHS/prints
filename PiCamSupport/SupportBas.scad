@@ -13,17 +13,51 @@ supportHT = 30;
 supportLG = 70;
 // Epaisseur du support
 supportEP = 5;
-
+// Largeur plateforme
+plateLG = 30;
 
 module supportBas()
 {
-    color("gold")
+    
     union ()
     {
-        translate([-supportLG/2,0,0])
-        cube([supportLG,rebortEP+supportEP,supportEP]);
+        // Support
+        color("gold")
+        {
+            // Accroche sur le rebort
+            translate([-supportLG/2,0,0])
+            cube([supportLG,rebortEP+supportEP,supportEP]);
+            
+            // Montant
+            translate([-supportLG/2,rebortEP,-cylindresHT+supportEP])
+            cube([supportLG,supportEP, cylindresHT-supportEP]);
+            
+            // Plate-forme
+            translate([-supportLG/2,rebortEP,-cylindresHT])
+            cube([supportLG, supportEP+plateLG, supportEP]);
+        }
         
+        // Trous
+        color("red")
+        {
+            // Cylindre filete
+            translate([0,ecartAxe, -cylindresHT+supportEP])
+            cylindre(fileteDM, cylindresEP, cylindresHT);
+            
+            // Cylindre lisses minusX
+            translate([-ecartTrous, ecartAxe, -cylindresHT+supportEP])
+            cylindre(lissesDM, cylindresEP, cylindresHT);
+            
+            // Cylindre lisses plusX
+            translate([ecartTrous, ecartAxe, -cylindresHT+supportEP])
+            cylindre(lissesDM, cylindresEP, cylindresHT);
+        }
         
+        // Renforts pour les trous
+        color("blue")
+        {
+            
+        }
     }    
 //    translate([-supportLG/2,0,0])
 //    difference ()
