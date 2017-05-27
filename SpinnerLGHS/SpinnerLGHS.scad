@@ -14,7 +14,7 @@ manchesPF = 15;
 // Diametre des tetes
 tetesDM = 22;
 // Epaisseur des tetes
-tetesEP = 7;
+tetesEP = 6;
 
 /* [Parametres des trous] */
 // Diametres des trous
@@ -38,6 +38,8 @@ hyp = tetesDM/2;
 cote1 = manchesPF/2;
 cote2 = sqrt(hyp*hyp-cote1*cote1)+manchesLG/2;
 
+decal = (tetesEP - manchesEP) / 2;
+
 color("gray")
 difference ()
 {
@@ -50,6 +52,7 @@ difference ()
             {
                 union ()
                 {
+                    translate([0,0,-decal])
                     cube([manchesLG, manchesPF, manchesEP], center=true);
                 
                     translate([cote2, 0,0])
