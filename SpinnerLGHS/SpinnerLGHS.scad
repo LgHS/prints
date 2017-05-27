@@ -12,15 +12,15 @@ manchesPF = 15;
 
 /* [Parametres des tetes] */
 // Diametre des tetes
-tetesDM = 20;
+tetesDM = 22;
 // Epaisseur des tetes
 tetesEP = 7;
 
 /* [Parametres des trous] */
 // Diametres des trous
-trousDM = 18;
+trousDM = 19.2;
 // Decalage des trous
-trousDC = 3;
+trousDC = 0;
 // Nombres de faces des trous
 trousFC = 6;
 
@@ -38,14 +38,13 @@ hyp = tetesDM/2;
 cote1 = manchesPF/2;
 cote2 = sqrt(hyp*hyp-cote1*cote1)+manchesLG/2;
 
-color("black")
+color("gray")
 difference ()
 {
     union ()
     {
         for (i = [0:1:cleNB-1])
         {
-            echo(i);
             rotate([0,0,180/cleNB*i])
             difference ()
             {
@@ -65,12 +64,13 @@ difference ()
                 
                 translate([-cote2-trousDC,0,0])
                 cylinder(d=trousDM, h=tetesEP+fudge, center=true, $fn=trousFC);
-            }
+            }                                                                                                                                                                               
         }
+        
+        color("white")
+        translate([0,0,manchesEP/2])
+        scale ([0.18,0.18,0.18])
+        logolghs();
     }
     cylinder(d=rouleDM, h=rouleHT, center=true);
 }
-color("white")
-translate([0,0,manchesEP/2])
-scale ([0.2,0.2,0.2])
-logolghs();
